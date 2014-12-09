@@ -5,7 +5,7 @@
     Loads player properties from an xml file
     See: https://github.com/skooter500/DT228-OOP 
 */
-
+//does this count?
 ArrayList<Player> players = new ArrayList<Player>();
 boolean[] keys = new boolean[526];
 
