@@ -33,13 +33,13 @@ void draw()
   }
   if(i<1)
   {
-    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(width+300,10000))));
+    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(width,width+300))));
     i++;
   }
 
   if(grounds.get(grounds.size()-1).pos.x+grounds.get(grounds.size()-1).len <= width+150 )
   {
-    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(width+300,10000))));
+    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(100,width))));
     grounds.get(grounds.size()-1).pos.x = grounds.get(grounds.size()-2).pos.x+grounds.get(grounds.size()-2).len+100;
   }
     

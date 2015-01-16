@@ -12,10 +12,14 @@ class Player
   color colour;
   boolean Gravity;
   boolean grounded;
+  boolean diagL = false;
+  boolean diagR = false;
+  boolean jump = false;
     
   Player()
   {
     pos = new PVector(width / 2, height / 2);
+    jump = new PVector(15,5);
   }
   
   Player(int index, color colour, char up, char down, char left, char right, char start, char button1, char button2)
@@ -51,7 +55,7 @@ class Player
   {
     if (checkKey(up))
     {
-     if(grounded==true)
+     if(grounded==true && jump==false)
       { 
         Gravity = !Gravity;
       }
@@ -75,10 +79,20 @@ class Player
     if (checkKey(button1))
     {
       println("Player " + index + " button 1");
+      if(grounded==true&&jump==false)
+      {
+        diagL = true;
+        Gravity = !Gravity;
+      }
     }
     if (checkKey(button2))
     {
       println("Player " + index + " butt2");
+      if(grounded==true&&jump==false)
+      {
+        diagR = true;
+        Gravity = !Gravity;
+      }
     }    
     this.grounded();
   }
@@ -98,32 +112,56 @@ class Player
       {
         if((pos.x+20 > grounds.get(i).pos.x) && (pos.x < grounds.get(i).pos.x + grounds.get(i).len))
         {
-          if((pos.y+25 < (height-(grounds.get(i).pos.y)))|| pos.y > height-grounds.get(i).pos.y-2)
+          if((pos.y+42 < (height-(grounds.get(i).pos.y))) || pos.y > height-grounds.get(i).pos.y-2)
           { 
-            if(pos.y+25 < grounds.get(i).pos.y && pos.y <= grounds.get(i).pos.y+2)
+            if(pos.y+25 >= grounds.get(i).pos.y && pos.y < grounds.get(i).pos.y)
             {
               pos.y = grounds.get(i).pos.y-20;
               grounded = true;
+              diagL=false;
+              diagR=false;
               break;
             }
             else
             {
-               pos.y+=5;
+               pos.y+=10;
                grounded = false;
+               if(diagL==true)
+               {
+                 pos.x-=5;
+               }
+               if(diagR==true)
+               {
+                 pos.x+=5;
+               }
                break;
             }
           }
         
           else
           {
-            pos.y = (height-(grounds.get(i).pos.y))+20;
+            pos.y = (height-(grounds.get(i).pos.y))-40;
             grounded = true;
+            diagL=false;
+            diagR=false;
             break;
           }
         }
         else
         {
-          pos.y+=5;
+          if(i==grounds.size() -1)
+          {
+            pos.y+=10;
+            if(diagL==true)
+               {
+                 pos.x-=5;
+               }
+               if(diagR==true)
+               {
+                 pos.x+=5;
+               }
+               grounded=false;
+          }
         }
       }
     }
@@ -135,21 +173,54 @@ class Player
         {
           if(pos.y > (grounds.get(i).pos.y)+7 || pos.y+20 < (grounds.get(i).pos.y))
           {
-           pos.y-=5;
-           grounded = false;
-           break;
+           if(pos.y-7 <= height-grounds.get(i).pos.y && pos.y+20 > height-grounds.get(i).pos.y)
+            {
+              pos.y = height-(grounds.get(i).pos.y+17);
+              grounded = true;
+              diagL=false;
+              diagR=false;
+              break;
+            }
+            else
+            {
+             pos.y-=10;
+             grounded = false;
+             if(diagL==true)
+             {
+               pos.x-=5;
+             }
+             if(diagR==true)
+             {
+               pos.x+=5;
+             }
+             break;
+            }
           }
         
           else 
           {
             pos.y = grounds.get(i).pos.y+2;
             grounded = true;
+            diagL=false;
+            diagR=false;
             break;
           }
         }
         else
         {
-          pos.y-=5;
+          if(i==grounds.size() -1)
+          {
+           pos.y-=10;
+           if(diagL==true)
+           {
+             pos.x-=5;
+           }
+           if(diagR==true)
+           {
+             pos.x+=5;
+           }
+           grounded=false;
+          }
         }
       }
     }
