@@ -25,6 +25,21 @@ void draw()
   {
     player.update();
     player.display();
+    for(int i=0; i< players.size(); i++)
+    {
+      if(i%2==0)
+      {
+        fill(255,0,255);
+        stroke(255,0,255);
+        text(players.get(i).score, width/2, 10);
+      }
+      else
+      {
+        fill(255,0,255);
+        stroke(255,0,255);
+        text(players.get(i).score, width/2, height-10);
+      }
+    }
   }
   for(Ground Ground:grounds)
   {
@@ -33,14 +48,14 @@ void draw()
   }
   if(i<1)
   {
-    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(width,width+300))));
+    grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(width-300,width+300))));
     i++;
   }
 
   if(grounds.get(grounds.size()-1).pos.x+grounds.get(grounds.size()-1).len <= width+150 )
   {
     grounds.add(new Ground(color(random(0, 255), random(0, 255), random(0, 255)),int(random(100,width))));
-    grounds.get(grounds.size()-1).pos.x = grounds.get(grounds.size()-2).pos.x+grounds.get(grounds.size()-2).len+100;
+    grounds.get(grounds.size()-1).pos.x = grounds.get(grounds.size()-2).pos.x+grounds.get(grounds.size()-2).len+(int(random(1,3)*50));
   }
     
   for(int j = 0; j < grounds.size(); j++) 
