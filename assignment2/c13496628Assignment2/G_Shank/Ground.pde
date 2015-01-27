@@ -3,6 +3,7 @@ class Ground
   PVector pos;
   color colour;
   int len;
+  int h;
   boolean one = true;
     
   Ground()
@@ -29,19 +30,20 @@ class Ground
     this();
     this.colour = colour;
     this.len = len;
+    this.h = int(random(2,6));
   }
 
   void update()
   {
-      pos.x -= 15;
+      pos.x -= scrollspeed;
   }
   
   void display()
   {    
     stroke(255,0,255);
     fill(0);    
-    rect(pos.x, pos.y, len, 2);
-    rect(pos.x, height-(pos.y), len, 2);
+    rect(pos.x, pos.y, len, h);
+    rect(pos.x, height-(pos.y), len, h);
   }    
   
 }
