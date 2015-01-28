@@ -47,10 +47,22 @@ PImage pause;
 boolean paused = false;
 boolean start = false;
 
+boolean devMode = false;
+boolean sketchFullScreen() {
+  return ! devMode;
+}
+
 void setup()
 {
   //set the size and framerate
-  size(1280, 1024);
+  if(devMode)
+  {
+    size(1280, 1024);
+  }
+  else
+  {
+    size(displayWidth, displayHeight);
+  }
   frameRate(60);
   //set up the player controllers, is part of the starter code
   setUpPlayerControllers();
@@ -83,7 +95,7 @@ void draw()
   {
     //controls the background
     background(0);
-    image(startscreen, 0, 0);
+    image(startscreen, 0, 0, width, height);
     //checks for the start button to start the game
     for (int i=0; i<players.size (); i++)
     {
@@ -104,7 +116,7 @@ void draw()
       //controls the background
       noTint();
       background(0);
-      image(pause, 0, 0);
+      image(pause, 0, 0, width, height);
       //checks for the start key to unpause the game and button 1 to exit the game
       for (int i=0; i<players.size (); i++)
       {
@@ -125,8 +137,8 @@ void draw()
       //controls the background
       background(0);
       tint(0, 127, 255, 127);
-      image(bg, bgi, 0);
-      image(bg2, bg2i, 0);
+      image(bg, bgi, 0, width, height);
+      image(bg2, bg2i, 0, width, height);
       //moves the background
       bgi--;
       bg2i--;
@@ -141,7 +153,7 @@ void draw()
       }
       //runs the frame on the top and bottom of the screen
       noTint();
-      image(ui, 0, 0);
+      image(ui, 0, 0, width, height);
       //runs the players
       for (Player player : players)
       {
