@@ -1,7 +1,8 @@
 class Player
 {
+  //pvector for position
   PVector pos;
-  PVector jumpv;
+  //part of the starter code
   char up;
   char down;
   char left;
@@ -10,18 +11,32 @@ class Player
   char button1;
   char button2;
   int index;
+  
+  //variable for height
   int h = 40;
+  //variable for width
   int w = 75;
+  //variable for score
   int score=0;
+  //variable for gravity
   int grav=10;
+  //variable to control the pause button
   int pausecount=0;
+  //variable to control the horizontal movement for left and right
   int horizontal=5;
+  //variable for powerups
   int bullet=0;
+  //part of the starter code
   color colour;
+  //boolean to control gravity
   boolean Gravity;
+  //boolean to control weather or not the player can flip gravity
   boolean grounded;
+  //boolean to control the left and right movement
   boolean diagL = false;
   boolean diagR = false;
+  
+  //initalizing the images for the players
   PImage kf1;
   PImage kf2;
   PImage kf3;
@@ -31,6 +46,7 @@ class Player
     
   Player()
   {
+    //loading in the images
     pos = new PVector(width / 2, height / 2);
     kf1 = loadImage("kitty_1.png");
     kf2 = loadImage("kitty_2.png");
@@ -40,6 +56,7 @@ class Player
     kf3f = loadImage("kitty_3f.png");
   }
   
+  //part of the starter code
   Player(int index, color colour, char up, char down, char left, char right, char start, char button1, char button2)
   {
     this();
@@ -55,6 +72,7 @@ class Player
     this.Gravity = true;
   }
   
+  //part of the starter code
   Player(int index, color colour, XML xml)
   {
     this(index
@@ -71,7 +89,10 @@ class Player
   
   void update()
   {
+    //increments score
     score+=1+bullet;
+    
+    //if up is pressed && player is running on something, flip gravity
     if (checkKey(up))
     {
      if(grounded==true )
@@ -83,6 +104,7 @@ class Player
     {
       
     }
+    //if up is pressed && player is running on something, flip gravity and move player left
     if (checkKey(left))
     {
       if(grounded==true)
@@ -91,6 +113,7 @@ class Player
         Gravity = !Gravity;
       }
     }    
+    //if up is pressed && player is running on something, flip gravity and move player right
     if (checkKey(right))
     {
       if(grounded==true)
@@ -100,6 +123,7 @@ class Player
       }
     }
     
+    //pauses the game
     if (checkKey(start))
     {
       println("Player " + index + " start");
@@ -123,7 +147,7 @@ class Player
   
   void display()
   {    
-    stroke(colour);
+    //controls the colours of the players
     if(index==0)
     {
       tint(255,0,255);
@@ -132,8 +156,8 @@ class Player
     {
       tint(0,158,255);
     }
-    fill(0);    
-    //rect(pos.x, pos.y, w, h);
+     
+    //draws the player character with simple animation
     if(frameCount%20<5)
     {
       if(Gravity==true)
@@ -182,7 +206,10 @@ class Player
   
   void grounded()
   {
+    //controls the pause button
     pausecount++;
+    
+    //if the player goes off screen, reset score and powerups and bring them back from the other side
     if(pos.y<-(height/10)) 
     {
       pos.y=height*1.1;
@@ -215,6 +242,8 @@ class Player
       scream.rewind();
       scream.play();
     }
+    
+    //collision with bullets
       for(int i=0;i<powerup.size();i++)
       {
         if(pos.x+w>=powerup.get(i).pos.x && pos.x <= powerup.get(i).pos.x+powerup.get(i).h )
@@ -224,6 +253,7 @@ class Player
             powerup.remove(i);
             if(bullet<=5)
             {
+              //increment bullet variable, play powerup soundeffect
               bullet++;
               poweru.rewind();
               poweru.play();
@@ -234,6 +264,7 @@ class Player
             powerup.remove(i);
             if(bullet<=5)
             {
+              //increment bullet variable, play powerup soundeffect
               bullet++;
               poweru.rewind();
               poweru.play();
@@ -242,16 +273,18 @@ class Player
          }
       }
     
+      //collision with platforms, and the effects of gravity
       for(int i = 0; i < grounds.size(); i++) 
       {
-            if(Gravity==true)
-    {
+        if(Gravity==true)
+        {
         if((pos.x+w > grounds.get(i).pos.x) && (pos.x < grounds.get(i).pos.x + grounds.get(i).len))
         {
           if((pos.y+h+(grav/2) < (height-(grounds.get(i).pos.y))) || pos.y > height-grounds.get(i).pos.y-grounds.get(i).h)
           { 
             if(pos.y+h+(grav/2) >= grounds.get(i).pos.y && pos.y < grounds.get(i).pos.y)
             {
+              //if it lands on the platform, set it to be able to flip again
               pos.y = grounds.get(i).pos.y-h;
               grounded = true;
               diagL=false;
@@ -267,6 +300,7 @@ class Player
                 {
                   if(pos.y+h+(grav/2)>players.get(1).pos.y && pos.y < players.get(1).pos.y+h)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(1).pos.y - h;
                     grounded=true;
                     diagL=false;
@@ -274,11 +308,13 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y+=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y+=grav;
                 }
               }
@@ -288,25 +324,30 @@ class Player
                 {
                   if(pos.y+h+(grav/2)>players.get(0).pos.y&&pos.y<players.get(0).pos.y+h)
                   {
+                    //if the playercollides with the other player, have them land on one another
                     pos.y=players.get(0).pos.y - h;
                     grounded=true;
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y+=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y+=grav;
                 }
               }
                if(diagL==true)
                {
+                 // the player moves left
                  moveL();
                }
                if(diagR==true)
                {
+                 //the player moves right
                  moveR();
                }
                break;
@@ -315,6 +356,7 @@ class Player
         
           else
           {
+            //the player lands on the platform, set it to be able to flip again
             pos.y = (height-(grounds.get(i).pos.y))-h;
             grounded = true;
             diagL=false;
@@ -324,7 +366,10 @@ class Player
         }
         else
         {
+          //prevents flipping in the air
           grounded=false;
+          
+          //collision
           if(i==grounds.size() -1)
           {
             if(index==0)
@@ -333,6 +378,7 @@ class Player
                 {
                   if(pos.y+h+(grav/2)>players.get(1).pos.y&&pos.y<players.get(1).pos.y+h)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(1).pos.y - h;
                     grounded=true;
                     diagR=false;
@@ -340,11 +386,13 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y+=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y+=grav;
                 }
               }
@@ -354,6 +402,7 @@ class Player
                 {
                   if(pos.y+h+(grav/2)>players.get(0).pos.y&&pos.y<players.get(0).pos.y+h)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(0).pos.y - h;
                     grounded=true;
                     diagR=false;
@@ -361,22 +410,27 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y+=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y+=grav;
                 }
               }
             if(diagL==true)
            {
+             //moves the player left
              moveL();
            }
            if(diagR==true)
            {
+             //moves the player right
              moveR();
            }
+           //prevents the player from flipping in the air
            grounded=false;
           }
         }
@@ -391,6 +445,7 @@ class Player
            {
            if(pos.y-(grav/2)-grounds.get(i).h <= height-grounds.get(i).pos.y && pos.y+h > height-grounds.get(i).pos.y)
             {
+              //if it lands on the platform, set it to be able to flip again
               pos.y = height-(grounds.get(i).pos.y-grounds.get(i).h);
               grounded = true;
               diagL=false;
@@ -399,6 +454,7 @@ class Player
             }
             else
             {
+              //prevents the player from flipping in the air
              grounded = false;
              if(index==0)
               {
@@ -406,6 +462,7 @@ class Player
                 {
                   if(pos.y-(grav/2) < players.get(1).pos.y+h && pos.y+h > players.get(1).pos.y)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(1).pos.y + h;
                     grounded=true;
                     diagR=false;
@@ -413,11 +470,13 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y-=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y-=grav;
                 }
               }
@@ -427,6 +486,7 @@ class Player
                 {
                   if(pos.y-(grav/2)<players.get(0).pos.y+h && pos.y+h>players.get(0).pos.y)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(0).pos.y + h;
                     grounded=true;
                     diagR=false;
@@ -434,20 +494,24 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y-=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y-=grav;
                 }
               }
              if(diagL==true)
              {
+               //moves the player left
                moveL();
              }
              if(diagR==true)
              {
+               //moves the player right
                moveR();
              }
              break;
@@ -456,6 +520,7 @@ class Player
         
           else 
           {
+            //if it lands on the platform, set it to be able to flip again
             pos.y = grounds.get(i).pos.y+grounds.get(i).h;
             grounded = true;
             diagL=false;
@@ -467,6 +532,7 @@ class Player
         {
           if(i==grounds.size() -1)
           {
+            //prevents the players from flipping in the air
            grounded = false;
              if(index==0)
               {
@@ -474,6 +540,7 @@ class Player
                 {
                   if(pos.y-(grav/2)<players.get(1).pos.y+h && pos.y+h>players.get(1).pos.y)
                   {
+                    //if it lands on the platform, set it to be able to flip again
                     pos.y=players.get(1).pos.y + h;
                     grounded=true;
                     diagR=false;
@@ -481,11 +548,13 @@ class Player
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y-=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y-=grav;
                 }
               }
@@ -495,25 +564,30 @@ class Player
                 {
                   if(pos.y-(grav/2)<players.get(0).pos.y+h && pos.y+h>players.get(0).pos.y)
                   {
+                    //if the players collide, they land on one another
                     pos.y=players.get(0).pos.y + h;
                     grounded=true;
                   }
                   else
                   {
+                    //gravity effects the player
                     pos.y-=grav;
                   }
                 }
                 else
                 {
+                  //gravity effects the player
                   pos.y-=grav;
                 }
               }
            if(diagL==true)
            {
+             //moves the player left
              moveL();
            }
            if(diagR==true)
            {
+             //moves the player right
              moveR();
            }
           }
@@ -528,6 +602,7 @@ class Player
      {
        if(pos.x+w+horizontal<players.get(1).pos.x || pos.y>players.get(1).pos.y+h || pos.y+h<players.get(1).pos.y)
        {
+         //moves the player right
          pos.x+=horizontal;
        }
      }
@@ -535,6 +610,7 @@ class Player
      {
        if(pos.x+w+horizontal<players.get(0).pos.x || pos.y>players.get(0).pos.y+h || pos.y+h<players.get(0).pos.y)
        {
+         //moves the player right
          pos.x+=horizontal;
        }
      }
@@ -546,6 +622,7 @@ class Player
      {
        if(pos.x-horizontal > players.get(1).pos.x+w || pos.y>players.get(1).pos.y+h || pos.y+h<players.get(1).pos.y)
        {
+         //moves the player left
          pos.x-=horizontal;
        }
      }
@@ -553,6 +630,7 @@ class Player
      {
        if(pos.x-horizontal > players.get(0).pos.x+h || pos.y>players.get(0).pos.y+h || pos.y+h<players.get(0).pos.y)
        {
+         //moves the player left
          pos.x-=horizontal;
        }
      }

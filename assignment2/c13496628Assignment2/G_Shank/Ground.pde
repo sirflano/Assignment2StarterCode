@@ -1,30 +1,22 @@
 class Ground
 {
+  //pvector for the position
   PVector pos;
+  //sets the colour for the platforms
   color colour;
+  //controls the length of the platforms
   int len;
+  //controls the height of the platforms
   int h;
-  boolean one = true;
+
     
   Ground()
   {
-    if(one==true)
-    {
-      pos = new PVector(0, int(random(150,(height/2)-20)));
-      one=false;
-    
-    
-      if(pos.y<(height/2)-100)
-      {
-        pos = new PVector(0, int(random(150,(height/2)-20)));
-      }
-      else
-      {
-        pos = new PVector(0, int(random(150,(height/2)-200)));
-      }
-    }
+      //sets the position of the platform
+      pos = new PVector(0, int(random(150,(height/2)-20)));    
   }
   
+  //reads in variables
   Ground(color colour, int len)
   {
     this();
@@ -33,11 +25,13 @@ class Ground
     this.h = int(random(2,6));
   }
 
+  //moves the platforms
   void update()
   {
       pos.x -= scrollspeed;
   }
   
+  //displays the platforms
   void display()
   {    
     stroke(255,0,255);
